@@ -1,20 +1,20 @@
 {
   "manifest_version": 3,
-  "name": "BPM and Key detector",
-  "description": "Finds BPM and key of audio playing in the current tab",
+  "name": "BPM & Key Finder",
   "version": "0.1.0",
+  "description": "Finds BPM and key of audio playing in the current tab",
 
-  "action": {
-    "default_popup": "popup/popup.html"
-  },
+  "permissions": [
+    "offscreen",
+    "tabCapture",
+    "activeTab"
+  ],
 
   "background": {
     "service_worker": "background.js"
   },
 
-  "permissions": [
-    "tabCapture",
-    "activeTab",
-    "offscreen"
-  ]
+  "action": {
+    "default_popup": "popup/popup.html"
+  }
 }

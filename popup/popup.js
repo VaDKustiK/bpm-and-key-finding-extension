@@ -1,7 +1,7 @@
-document.getElementById("start").onclick = () => {
-  chrome.runtime.sendMessage({ type: "START_ANALYSIS" });
-};
+document.getElementById("start").addEventListener("click", () => {
+  chrome.runtime.sendMessage({ type: "START" });
+});
 
-document.getElementById("stop").onclick = () => {
-  chrome.runtime.sendMessage({ type: "STOP_ANALYSIS" });
-};
+document.getElementById("stop").addEventListener("click", () => {
+  chrome.runtime.sendMessage({ type: "STOP" });
+});
