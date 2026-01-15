@@ -35,7 +35,8 @@ chrome.runtime.onMessage.addListener(async (message) => {
     workletNode = new AudioWorkletNode(audioCtx, "audio-processor");
 
     let audioBuffer = [];
-    let bufferSize = 44100 * 2;
+    const bufferSize = 44100 * 4;
+    const bpmInterval = 1000;
 
     workletNode.port.onmessage = (e) => {
       if (e.data.type === "AUDIO_FLOW") {
@@ -49,6 +50,29 @@ chrome.runtime.onMessage.addListener(async (message) => {
         console.log("Buffered samples:", audioBuffer.length);
       }
     };
+
+    let bpmHistory = [];
+    const maxHistory = 5;
+    
+    setInterval(() => {
+    if (audioBuffer.length < 44100 * 4) return;
+
+    const signal = new Float32Array(audioBuffer);
+
+    try {
+      const mt = new MusicTempo(signal);
+      const bpm = Number(mt.tempo);
+
+      bpmHistory.push(bpm);
+      if (bpmHistory.length > maxHistory) bpmHistory.shift();
+
+      const avgBPM = bpmHistory.reduce((a, b) => a + b, 0) / bpmHistory.length;
+      console.log("Smoothed BPM:", avgBPM.toFixed(1));
+
+    } catch (err) {
+      console.warn("BPM detection failed:", err);
+    }
+  }, bpmInterval);
 
     monitorGain = audioCtx.createGain();
     monitorGain.gain.value = 1; // 0 = no audio
