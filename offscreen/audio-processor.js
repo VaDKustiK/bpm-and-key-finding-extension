@@ -1,21 +1,21 @@
 class AudioProcessor extends AudioWorkletProcessor {
-    constructor() {
-        super();
-        this.sampleCount = 0;
-    }
+  constructor() {
+    super();
+  }
 
-    process(inputs) {
+  process(inputs) {
     const input = inputs[0];
     if (!input || !input[0]) return true;
 
-    const samples = input[0];
+    const channelData = input[0];
 
     this.port.postMessage({
-        type: "AUDIO_FLOW",
-        samples: samples.slice(0)
+      type: "AUDIO",
+      buffer: channelData.slice(0)
     });
 
     return true;
-    }
+  }
 }
+
 registerProcessor("audio-processor", AudioProcessor);
